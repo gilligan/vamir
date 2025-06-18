@@ -139,6 +139,9 @@ local plugins = {
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim", -- multiple LSP diagnostics per line
 		config = true,
 	},
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-path" },
+
 
 	{ -- Autocompletion
 		"hrsh7th/nvim-cmp",
