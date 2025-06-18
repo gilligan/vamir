@@ -85,7 +85,14 @@ local plugins = {
     },
     opts = {},
   },
-
+	{
+		"kana/vim-textobj-user",
+		dependencies = {
+			"glts/vim-textobj-comment",
+			"kana/vim-textobj-line",
+			"kana/vim-textobj-entire",
+		},
+	},
   { "romgrk/barbar.nvim", -- a pretty tab line
     dependencies = {
       "lewis6991/gitsigns.nvim",
