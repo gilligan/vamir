@@ -129,6 +129,8 @@ local plugins = {
     config = true,
   },
 
+  { "AkashKarnatak/rooter.nvim" },
+
   { "nvim-treesitter/nvim-treesitter", -- syntax highlighting
     build = ":TSUpdate",
   },
