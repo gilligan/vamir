@@ -113,6 +113,19 @@ local plugins = {
       "nvim-telescope/telescope-ui-select.nvim", -- override the selection UI with Telescope
     },
   },
+	{
+		"ibhagwan/fzf-lua",
+		-- optional for icon support
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			-- calling `setup` is optional for customization
+			require("fzf-lua").setup({
+				defaults = { winopts = { height = 0.33, width = 0.33, preview = { hidden = "hidden" } } },
+			})
+			vim.keymap.set("n", "<c-P>", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
+			vim.keymap.set("n", "<c-G>", "<cmd>lua require('fzf-lua').git_files()<CR>", { silent = true })
+		end,
+	},
   { "nvim-neo-tree/neo-tree.nvim", -- file browsing
     branch = "v3.x",
     dependencies = {
@@ -390,26 +403,6 @@ lspconfig.rust_analyzer.setup {
 lspconfig.terraformls.setup {}
 lspconfig.ts_ls.setup {}
 
--- Reformat code on write, if LSP is initialized.
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(event)
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
-    if client.supports_method("textDocument/formatting") then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = event.buf,
-        callback = function(event)
-          vim.lsp.buf.format({
-            bufnr = event.buf,
-            id = client.id,
-            async = false,
-            timeout_ms = 250,
-          })
-        end,
-      })
-    end
-  end
-})
-
 -- Set up key bindings
 local neoTreeCommand = require("neo-tree.command")
 local telescopeBuiltin = require("telescope.builtin")
@@ -418,6 +411,7 @@ local wk = require("which-key")
 ---- navigate soft-wraps according to the screen, not the file
 vim.keymap.set("n", "j", "gj", { noremap = true })
 vim.keymap.set("n", "k", "gk", { noremap = true })
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 wk.add({
   -- most keybindings are behind the Leader key
