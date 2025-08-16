@@ -66,6 +66,12 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Initialize plugins
 local plugins = {
+  { name = "lsp_plugins",
+    url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    config = function()
+      require("lsp_lines").setup()
+    end
+  },
   { "catppuccin/nvim", -- pretty colors
     name = "catppuccin",
     priority = 1000,
@@ -412,6 +418,13 @@ local wk = require("which-key")
 vim.keymap.set("n", "j", "gj", { noremap = true })
 vim.keymap.set("n", "k", "gk", { noremap = true })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+
+vim.keymap.set(
+  "",
+  "<Leader>lt",
+  require("lsp_lines").toggle,
+  { desc = "Toggle lsp_lines" }
+)
 
 wk.add({
   -- most keybindings are behind the Leader key
