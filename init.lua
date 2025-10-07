@@ -83,7 +83,7 @@ local plugins = {
   { "tpope/vim-repeat" }, -- better repeat (`.`) semantics
   { "tpope/vim-surround" }, -- add, remove, and modify surrounding characters
   { "tpope/vim-commentary" }, -- comment and uncomment lines
-  { "christoomey/vim-tmux-navigator" },
+  { "christoomey/vim-tmux-navigator", event = "VeryLazy", },
   { "folke/which-key.nvim", -- show keybinding help as you type
     event = "VeryLazy",
     dependencies = {
