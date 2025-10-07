@@ -424,41 +424,38 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldenable = false
 
--- Configure LSP servers
-local lspconfig = require("lspconfig")
----- a little hack to get the environment from direnv before running
----- to do:
-----   - add a command for "allow"
-----   - add a command for "deny"
-----   - handle errors nicely
-----   - factor into a plugin
-lspconfig.util.on_setup = lspconfig.util.add_hook_before(lspconfig.util.on_setup, function(config)
+-- Configure LSP servers (modern API)
+local lsp_util = require("lspconfig.util")
+
+-- prepend "direnv exec ." to all LSP commands
+vim.lsp._on_setup = vim.lsp._on_setup or function() end
+lsp_util.on_setup = lsp_util.add_hook_before(lsp_util.on_setup, function(config)
   config.cmd = { "direnv", "exec", ".", unpack(config.cmd) }
 end)
-lspconfig.hls.setup {
-  filetypes = { "haskell", "lhaskell", "cabal" }, -- configure HLS to run on Cabal files too
-}
-lspconfig.omnisharp.setup {
-  cmd = { "OmniSharp" },
-}
-lspconfig.pyright.setup {}
-lspconfig.rust_analyzer.setup {
+
+
+vim.lsp.config('rust_analyzer', {
   settings = {
-    ["rust-analyzer"] = {
-      cargo = {
-        features = "all",
-      },
-      check = {
-        command = "clippy",
-      },
-      procMacro = {
-        enable = true,
-      },
-    },
+    ['rust-analyzer'] = {},
   },
-}
-lspconfig.terraformls.setup {}
-lspconfig.ts_ls.setup {}
+})
+vim.lsp.enable('rust_analyzer')
+
+
+vim.lsp.config('hls', {
+  settings = {
+    ['hls'] = {},
+  },
+})
+vim.lsp.enable('hls')
+
+
+vim.lsp.config('ts_ls', {
+  settings = {
+    ['ts_ls'] = {},
+  },
+})
+vim.lsp.enable('ts_ls')
 
 -- Set up key bindings
 local neoTreeCommand = require("neo-tree.command")
