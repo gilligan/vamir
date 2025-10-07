@@ -47,6 +47,57 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
   command = "checktime",
 })
 
+-- clipboard behavior
+-- Detect OS and set clipboard provider accordingly
+local uname = vim.loop.os_uname().sysname
+if uname == "Darwin" then
+  -- macOS
+  vim.g.clipboard = {
+    name = 'pbcopy',
+    copy = {
+      ['+'] = 'pbcopy',
+      ['*'] = 'pbcopy',
+    },
+    paste = {
+      ['+'] = 'pbpaste',
+      ['*'] = 'pbpaste',
+    },
+    cache_enabled = false,
+  }
+elseif uname == "Linux" then
+  -- Wayland/Linux
+  if vim.fn.executable('wl-copy') == 1 then
+    vim.g.clipboard = {
+      name = 'wl-clipboard',
+      copy = {
+        ['+'] = 'wl-copy',
+        ['*'] = 'wl-copy',
+      },
+      paste = {
+        ['+'] = 'wl-paste',
+        ['*'] = 'wl-paste',
+      },
+      cache_enabled = false,
+    }
+  elseif vim.fn.executable('xclip') == 1 then
+    vim.g.clipboard = {
+      name = 'xclip',
+      copy = {
+        ['+'] = 'xclip -selection clipboard',
+        ['*'] = 'xclip -selection primary',
+      },
+      paste = {
+        ['+'] = 'xclip -selection clipboard -o',
+        ['*'] = 'xclip -selection primary -o',
+      },
+      cache_enabled = false,
+    }
+  end
+end
+
+-- Always integrate with system clipboard
+vim.opt.clipboard = 'unnamedplus'
+
 -- Leader
 vim.g.mapleader = " " -- set the leader key to <Space>
 
